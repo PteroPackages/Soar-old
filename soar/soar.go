@@ -3,6 +3,7 @@ package soar
 import (
 	"log"
 
+	"github.com/pteropackages/soar/app"
 	"github.com/pteropackages/soar/cmd"
 	"github.com/spf13/cobra"
 )
@@ -17,6 +18,7 @@ func init() {
 	root.AddCommand(cmd.VersionCmd)
 	root.AddCommand(cmd.InfoCmd)
 	root.AddCommand(cmd.ConfigCmd)
+	root.AddCommand(app.GetUsersCmd)
 }
 
 func Execute() {
