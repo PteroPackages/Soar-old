@@ -1,3 +1,7 @@
+# Template config yaml file
+# if /bin is not generated,
+# use this
+
 version: 0.0.1a
 
 application:
