@@ -1,4 +1,4 @@
-package soar
+package request
 
 import (
 	"bytes"
