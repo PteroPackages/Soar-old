@@ -3,7 +3,7 @@ package app
 import (
 	"fmt"
 
-	"github.com/pteropackages/soar/soar"
+	"github.com/pteropackages/soar/request"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -13,7 +13,7 @@ var GetUsersCmd = &cobra.Command{
 	Short: "Gets a list of users from the panel",
 	Long:  "Gets a list of users from the panel, following the Pterodactyl pagination system",
 	Run: func(cmd *cobra.Command, args []string) {
-		session := soar.NewSession("application")
+		session := request.NewSession("application")
 		// if len(args) > 0 {
 		// 	// TODO
 		// }
