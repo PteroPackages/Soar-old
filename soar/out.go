@@ -1,32 +1,52 @@
 package soar
 
 import (
-	"encoding/json"
-	"errors"
+	"fmt"
 	"os"
-	"path"
 	"path/filepath"
+	"time"
 )
 
-func writeJSON(data []byte, fp string) (string, error) {
-	var res *map[string]interface{}
-	json.Unmarshal(data, res)
-	m, _ := json.Marshal(res)
+func exists(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	if os.IsNotExist(err) {
+		return false
+	}
+	return false
+}
 
-	if fp != "" {
-		abspath, err := filepath.Abs(fp)
-		if err != nil {
-			return "", err
-		}
-		if !path.IsAbs(abspath) {
-			return "", errors.New("could not resolve path, aborting")
-		}
-		file, err := os.Open(abspath)
-		if err != nil {
-			return "", err
-		}
-		file.Write(m)
+func WriteLocalFile(data, ext string) error {
+	dir, _ := os.Getwd()
+	name := fmt.Sprintf("%s/out_%d.%s", dir, time.Now().Unix(), ext)
+	fp, err := filepath.Abs(name)
+	if err != nil {
+		return err
 	}
 
-	return string(m), nil
+	var _file *os.File
+	if exists(fp) {
+		_file, err = os.Open(fp)
+	} else {
+		_file, err = os.Create(fp)
+	}
+	if err != nil {
+		return err
+	}
+
+	_file.WriteString(data)
+	_file.Close()
+	return nil
+}
+
+func WriteLogFile(data string) error {
+	file, err := os.Create(fmt.Sprintf("/bin/logs/log_%d.log", time.Now().Unix()))
+	if err != nil {
+		return err
+	}
+	file.WriteString(data)
+	file.Close()
+	return nil
 }
