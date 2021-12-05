@@ -5,7 +5,6 @@ import (
 
 	"github.com/pteropackages/soar/request"
 	"github.com/spf13/cobra"
-	"gopkg.in/yaml.v2"
 )
 
 var GetUsersCmd = &cobra.Command{
@@ -22,9 +21,8 @@ var GetUsersCmd = &cobra.Command{
 			panic(err)
 		}
 
-		var parsed map[string]string
-		yaml.Unmarshal(data, &parsed)
-		fmt.Printf("%v\n", parsed)
+		res := request.ParseToString(data)
+		fmt.Printf("Successful API Response:\n\n%s", res)
 	},
 }
 
