@@ -18,7 +18,7 @@ func init() {
 	root.AddCommand(cmd.VersionCmd)
 	root.AddCommand(cmd.InfoCmd)
 	root.AddCommand(cmd.ConfigCmd)
-	root.AddCommand(app.GetUsersCmd)
+	root.AddCommand(app.GroupCmdApplication)
 }
 
 func Execute() {
