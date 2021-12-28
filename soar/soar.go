@@ -19,7 +19,7 @@ func init() {
 	root.AddCommand(cmd.VersionCmd)
 	root.AddCommand(cmd.InfoCmd)
 	root.AddCommand(config.GroupCommand)
-	root.AddCommand(app.GroupCmdApplication)
+	root.AddCommand(app.GroupCommand)
 }
 
 func Execute() {

@@ -11,7 +11,7 @@ var GroupCommand = &cobra.Command{
 	Use: "config",
 }
 
-var cmdInfo = &cobra.Command{
+var InfoCmd = &cobra.Command{
 	Use:   "info",
 	Short: "Gets information about the Soar configuration.",
 	Long:  "Gets information about the Soar configuration.",
@@ -38,5 +38,5 @@ var cmdInfo = &cobra.Command{
 }
 
 func init() {
-	GroupCommand.AddCommand(cmdInfo)
+	GroupCommand.AddCommand(InfoCmd)
 }

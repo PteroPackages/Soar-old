@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var GetUsersCmd = &cobra.Command{
+var getUsersCmd = &cobra.Command{
 	Use:   "get-users",
 	Short: "Gets a list of users from the panel",
 	Long:  "Gets a list of users from the panel, following the Pterodactyl pagination system",
@@ -27,7 +27,7 @@ var GetUsersCmd = &cobra.Command{
 }
 
 func init() {
-	flags := GetUsersCmd.Flags()
+	flags := getUsersCmd.Flags()
 	flags.String("id", "", "the internal ID of the user")
 	flags.String("uuid", "", "the UUID of the user")
 	flags.String("username", "", "the username to query by")
