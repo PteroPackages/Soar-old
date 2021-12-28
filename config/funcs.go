@@ -3,7 +3,6 @@ package config
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 
@@ -35,19 +34,19 @@ var templateConfig = []byte(`
 version: 0.0.1a
 
 application:
-	- url: ""
-	- key: ""
+  - url: ""
+  - key: ""
 
 client:
-	- url: ""
-	- key: ""
+  - url: ""
+  - key: ""
 
 logs:
-	- strict_mode: false
-	- show_debug: false
-	- show_http_log: false
-	- show_ws_log: false
-	- error_out_dir: ""
+  - strict_mode: false
+  - show_debug: false
+  - show_http_log: false
+  - show_ws_log: false
+  - error_out_dir: ""
 `)
 
 func Exists(path string) bool {
@@ -67,18 +66,18 @@ func GetConfig() (*Config, error) {
 		return nil, errors.New("soar config file not found")
 	}
 
-	raw, err := ioutil.ReadFile(fp)
+	data, err := os.ReadFile(fp)
 	if err != nil {
 		return nil, errors.New("couldn't open config file")
 	}
 
 	var config *Config
-	yaml.Unmarshal(raw, &config)
+	yaml.Unmarshal(data, &config)
 	return config, nil
 }
 
 func CreateEnv(fp string) error {
-	err := os.MkdirAll(fp, os.ModeDir)
+	err := os.MkdirAll(path.Join(fp, "logs"), os.ModeDir)
 	if err != nil {
 		if errors.Is(err, os.ErrPermission) {
 			return errors.New("missing permissions to create soar directories")
@@ -93,14 +92,15 @@ func CreateEnv(fp string) error {
 	}
 
 	defer config.Close()
-
-	os.Setenv("SOAR_PATH", fp)
 	config.Write(templateConfig)
+	if err = os.Setenv("SOAR_PATH", fp); err != nil {
+		fmt.Println("warning: could not set environment variable for 'SOAR_PATH'.")
+	}
 
 	return nil
 }
 
-func ClearOldEnv(fp string) error {
+func ClearEnv(fp string) error {
 	if !Exists(fp) {
 		return nil
 	}
