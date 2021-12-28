@@ -5,6 +5,7 @@ import (
 
 	"github.com/pteropackages/soar/app"
 	"github.com/pteropackages/soar/cmd"
+	"github.com/pteropackages/soar/config"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +18,7 @@ var root = &cobra.Command{
 func init() {
 	root.AddCommand(cmd.VersionCmd)
 	root.AddCommand(cmd.InfoCmd)
-	root.AddCommand(cmd.ConfigCmd)
+	root.AddCommand(config.GroupCommand)
 	root.AddCommand(app.GroupCmdApplication)
 }
 
