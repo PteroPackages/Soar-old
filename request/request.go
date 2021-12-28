@@ -3,34 +3,26 @@ package request
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"os"
 
-	"github.com/pteropackages/soar/cmd"
-	"gopkg.in/yaml.v2"
+	"github.com/pteropackages/soar/config"
 )
 
 type SoarSession struct {
-	Config     *cmd.SoarConfig
+	Config     *config.Config
 	URL        string
 	Key        string
 	Client     *http.Client
 	RetryLimit int32 // TODO: implement this
 }
 
-func GetConfig() *cmd.SoarConfig {
-	file, err := os.ReadFile("/bin/config.yml")
-	if err != nil {
-		panic(err)
-	}
-
-	var config *cmd.SoarConfig
-	yaml.Unmarshal(file, &config)
-	return config
-}
-
 func NewSession(api string) *SoarSession {
-	config := GetConfig()
+	config, err := config.GetConfig()
+	if err != nil {
+		fmt.Printf("soar: %s", err.Error())
+		return nil
+	}
 
 	var auth []string
 	switch api {
