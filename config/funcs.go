@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
+	"runtime"
 
 	"gopkg.in/yaml.v2"
 )
@@ -94,6 +96,15 @@ func CreateEnv(fp string) error {
 	defer config.Close()
 	config.Write(templateConfig)
 	if err = os.Setenv("SOAR_PATH", fp); err != nil {
+		fmt.Println("warning: could not set environment variable for 'SOAR_PATH'.")
+	}
+
+	if runtime.GOOS == "windows" {
+		_, err = exec.Command("set_env.cmd", fp).Output()
+	} else {
+		_, err = exec.Command("/bin/bash", "set_env.sh", fp).Output()
+	}
+	if err != nil {
 		fmt.Println("warning: could not set environment variable for 'SOAR_PATH'.")
 	}
 
