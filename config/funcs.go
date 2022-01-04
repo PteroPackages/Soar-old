@@ -51,16 +51,17 @@ logs:
   - error_out_dir: ""
 `)
 
-func Exists(path string) bool {
-	if _, err := os.Stat(path); err != nil {
-		return false
+func Exists(fp string) bool {
+	_, err := os.Stat(fp)
+	if err != nil {
+		return !os.IsNotExist(err)
 	}
 	return true
 }
 
 func GetConfig() (*Config, error) {
-	fp := os.Getenv("SOAR_PATH")
-	if fp == "" {
+	fp, ok := os.LookupEnv("SOAR_PATH")
+	if !ok {
 		return nil, errors.New("soar directories not found or set")
 	}
 
