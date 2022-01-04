@@ -4,29 +4,45 @@
 # TODO: add to PATH env
 
 if (Get-Command 'go') {
-    Write-Output 'soar: checking package...'
-    if (!(Test-Path '.\main.go')) {
-        Write-Output 'soar: installer must be executed in package directory'
+    Write-Host 'soar: checking package...'
+
+    if (!(Test-Path '..\main.go')) {
+        Write-Host 'soar: installer must be executed in package directory.'
         Exit 1
     }
 
-    Write-Output 'soar: starting installation...'
-
-    if (!(Test-Path '.\bin')) {
-        New-Item -Path '.\bin' -ItemType Directory
+    Write-Host "soar: config directories will be setup at 'C:\soar'."
+    $res = Read-Host -Prompt '    : do you want to continue? (y/n) '
+    switch ($res) {
+        'y' {}
+        'Y' {}
+        Default {
+            Exit 0
+        }
     }
 
-    if (!(Test-Path '.\bin\logs')) {
-        New-Item -Path '.\bin\logs' -ItemType Directory
+    Write-Host 'soar: starting installation...'
+
+    if (!(Test-Path 'C:\soar')) {
+        New-Item -Path 'C:\soar' -ItemType Directory
     }
 
-    Write-Output 'soar: building packages...'
+    if (!(Test-Path 'C:\soar\bin')) {
+        New-Item -Path 'C:\soar\bin' -ItemType Directory
+    }
+
+    if (!(Test-Path 'C:\soar\bin\logs')) {
+        New-Item -Path 'C:\soar\bin\logs' -ItemType Directory
+    }
+
+    Write-Host 'soar: building packages...'
+    Set-Location '..'
     Invoke-Command {go build}
 
-    Write-Output 'soar: attempting config setup...'
-    Invoke-Command {.\soar.exe config setup --force}
-    Write-Output 'soar: successfully installed Soar CLI!'
+    Write-Host 'soar: attempting config setup...'
+    Invoke-Command {.\soar.exe config setup}
+    Write-Host 'soar: successfully installed Soar CLI!'
 } else {
-    Write-Output 'Go v1.16 or above is required'
+    Write-Host 'Go v1.16 or above is required'
     Exit 1
 }
